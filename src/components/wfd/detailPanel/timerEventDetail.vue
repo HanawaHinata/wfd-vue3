@@ -1,19 +1,31 @@
 <template>
   <div :data-clazz="props.model.clazz">
-    <div class="panel-title">{{ i18n['scriptTask'] }}</div>
+    <div class="panel-title">{{ i18n['timerEvent'] }}</div>
     <div class="panel-body">
 
       <default-detail :model="model" :onChange="onChange" :readOnly="readOnly" />
 
 
       <div class="panel-row">
-        <div class="label">{{i18n['scriptTask.script']}}：</div>
+        <div class="label">{{i18n['timerEvent.cycle']}}：</div>
         <div class="input">
           <a-textarea
             :disabled="readOnly"
-            :value="props.model.script"
+            :value="props.model.cycle"
             @change="(e) => {
-              props.onChange('script', e.target.value)
+              props.onChange('cycle', e.target.value)
+            }"
+          />
+        </div>
+      </div>
+      <div class="panel-row">
+        <div class="label">{{i18n['timerEvent.duration']}}：</div>
+        <div class="input">
+          <a-textarea
+            :disabled="readOnly"
+            :value="props.model.duration"
+            @change="(e) => {
+              props.onChange('duration', e.target.value)
             }"
           />
         </div>

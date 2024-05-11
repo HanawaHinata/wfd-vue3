@@ -1,19 +1,19 @@
 <template>
   <div :data-clazz="props.model.clazz">
-    <div class="panel-title">{{ i18n['scriptTask'] }}</div>
+    <div class="panel-title">{{ i18n['javaTask'] }}</div>
     <div class="panel-body">
 
       <default-detail :model="model" :onChange="onChange" :readOnly="readOnly" />
 
 
       <div class="panel-row">
-        <div class="label">{{i18n['scriptTask.script']}}：</div>
+        <div class="label">{{i18n['javaTask.javaClass']}}：</div>
         <div class="input">
-          <a-textarea
+          <a-input
             :disabled="readOnly"
-            :value="props.model.script"
+            :value="props.model.javaClass"
             @change="(e) => {
-              props.onChange('script', e.target.value)
+              props.onChange('javaClass', e.target.value)
             }"
           />
         </div>

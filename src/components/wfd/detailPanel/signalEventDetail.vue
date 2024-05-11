@@ -1,21 +1,28 @@
 <template>
   <div :data-clazz="props.model.clazz">
-    <div class="panel-title">{{ i18n['scriptTask'] }}</div>
+    <div class="panel-title">{{ i18n['signalEvent'] }}</div>
     <div class="panel-body">
 
       <default-detail :model="model" :onChange="onChange" :readOnly="readOnly" />
 
 
       <div class="panel-row">
-        <div class="label">{{i18n['scriptTask.script']}}：</div>
+        <div class="label">{{i18n['signalEvent.signal']}}：</div>
         <div class="input">
-          <a-textarea
+          <a-select
+            style="width: 100%"
+            :placeholder="i18n['signalEvent.signal']"
+            :value="model.signal"
+            allow-create
             :disabled="readOnly"
-            :value="props.model.script"
             @change="(e) => {
-              props.onChange('script', e.target.value)
+              onChange('signal', e)
             }"
-          />
+          >
+            <template v-for="(item, index) in props.signalDefs" :key="index">
+              <a-select-option :value="item.id" >{{item.name}}</a-select-option>
+            </template>
+          </a-select>
         </div>
       </div>
 
@@ -43,6 +50,12 @@ const props = defineProps({
   readOnly: {
     type: Boolean,
     default: false,
+  },
+  signalDefs: {
+    type: Array,
+    default: function(){
+      return []
+    }
   }
 })
 </script>

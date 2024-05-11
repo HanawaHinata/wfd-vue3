@@ -1,31 +1,16 @@
 <template>
   <div :data-clazz="props.model.clazz">
-    <div class="panel-title">{{ i18n['scriptTask'] }}</div>
+    <div class="panel-title">{{ panelTitleComputed }}</div>
     <div class="panel-body">
 
       <default-detail :model="model" :onChange="onChange" :readOnly="readOnly" />
-
-
-      <div class="panel-row">
-        <div class="label">{{i18n['scriptTask.script']}}：</div>
-        <div class="input">
-          <a-textarea
-            :disabled="readOnly"
-            :value="props.model.script"
-            @change="(e) => {
-              props.onChange('script', e.target.value)
-            }"
-          />
-        </div>
-      </div>
-
 
     </div>
   </div>
 </template>
 <script setup>
 import defaultDetail from "./defaultDetail.vue"
-import {inject} from "vue";
+import {computed, inject} from "vue";
 
 const i18n = inject('i18n')
 
@@ -44,5 +29,17 @@ const props = defineProps({
     type: Boolean,
     default: false,
   }
+})
+
+
+const panelTitleComputed = computed(() => {
+  let panelTitle = "-"
+  switch (props.model.clazz){
+    case "exclusiveGateway":
+    case "gateway": panelTitle = i18n['exclusiveGateway']; break;
+    case "parallelGateway": panelTitle = i18n['parallelGateway']; break;
+    case "inclusiveGateway": panelTitle = i18n['inclusiveGateway']; break;
+  }
+  return panelTitle
 })
 </script>

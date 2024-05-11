@@ -1,24 +1,9 @@
 <template>
   <div :data-clazz="props.model.clazz">
-    <div class="panel-title">{{ i18n['scriptTask'] }}</div>
+    <div class="panel-title">{{ i18n['startEvent'] }}</div>
     <div class="panel-body">
 
       <default-detail :model="model" :onChange="onChange" :readOnly="readOnly" />
-
-
-      <div class="panel-row">
-        <div class="label">{{i18n['scriptTask.script']}}：</div>
-        <div class="input">
-          <a-textarea
-            :disabled="readOnly"
-            :value="props.model.script"
-            @change="(e) => {
-              props.onChange('script', e.target.value)
-            }"
-          />
-        </div>
-      </div>
-
 
     </div>
   </div>
@@ -45,4 +30,5 @@ const props = defineProps({
     default: false,
   }
 })
+
 </script>

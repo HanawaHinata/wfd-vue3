@@ -284,7 +284,9 @@ onMounted(() => {
   graph.value.saveXML = (createFile = true) => {
     exportXML(graph.value.save(), processModel.value, createFile)
   };
-  getGraphData.value = graph.value.save
+  getGraphData.value = () => {
+    return graph.value.save()
+  }
   saveXML.value = graph.value.saveXML
   // 获取XML逻辑
   graph.value.getXML = (createFile = false) => exportXML(graph.value.save(), processModel.value, createFile);

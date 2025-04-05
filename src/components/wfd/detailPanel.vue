@@ -46,7 +46,7 @@
 
     <!-- 当前流程配置属性 -->
     <process-detail v-else-if="props.model.clazz === 'process'" :model="props.model" :on-change="props.onChange"
-                    :read-only="readOnly" :categories="categories" />
+                    :read-only="props.readOnly" :categories="categories" />
     <!-- 当前流程配置属性 结束 -->
 
     <a-alert

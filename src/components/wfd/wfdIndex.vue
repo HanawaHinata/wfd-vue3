@@ -118,7 +118,7 @@ const addItemPanelRefs = ref()
 const renderCanvasRefs = ref()
 
 // 渲染对象
-const graph = ref(null)
+let graph
 // Command 插件
 const cmdPlugin = ref(null)
 
@@ -152,9 +152,9 @@ const currentTimeStep = ref(0)
  */
 // 初始化事件逻辑
 function initEvents() {
-  graph.value.on('afteritemselected', (items) => {
+  graph.on('afteritemselected', (items) => {
     if (items && items.length > 0) {
-      let item = graph.value.findById(items[0]);
+      let item = graph.findById(items[0]);
       if (!item) {
         item = getNodeInSubProcess(items[0])
       }
@@ -168,7 +168,7 @@ function initEvents() {
   const width = renderCanvasRefs.value.offsetWidth;
   const height = renderCanvasRefs.value.offsetHeight;
   resizeFunc.value = () => {
-    graph.value.changeSize(width, height);
+    graph.changeSize(width, height);
   };
   window.addEventListener("resize", resizeFunc.value);
 }
@@ -198,7 +198,7 @@ function initShape(data) {
 
 // 获取子流程的节点
 function getNodeInSubProcess(itemId) {
-  const subProcess = graph.value.find('node', (node) => {
+  const subProcess = graph.find('node', (node) => {
     if (node.get('model')) {
       const clazz = node.get('model').clazz;
       if (clazz === 'subProcess') {
@@ -224,19 +224,19 @@ function getNodeInSubProcess(itemId) {
 // 配置修改监听
 function onItemCfgChange(key, value) {
   console.log(key, value)
-  const items = graph.value.get('selectedItems');
+  const items = graph.get('selectedItems');
   if (items && items.length > 0) {
-    let item = graph.value.findById(items[0]);
+    let item = graph.findById(items[0]);
     if (!item) {
       item = getNodeInSubProcess(items[0])
     }
-    if (graph.value.executeCommand) {
-      graph.value.executeCommand('update', {
+    if (graph.executeCommand) {
+      graph.executeCommand('update', {
         itemId: items[0],
         updateModel: {[key]: value}
       });
     } else {
-      graph.value.updateItem(item, {[key]: value});
+      graph.updateItem(item, {[key]: value});
     }
     let updateModel = {}
     updateModel[key] = item.getModel()[key]
@@ -261,7 +261,7 @@ onMounted(() => {
   }
   const width = renderCanvasRefs.value.offsetWidth;
   const height = renderCanvasRefs.value.offsetHeight;
-  graph.value = new G6.Graph({
+  graph = new G6.Graph({
     plugins: plugins,
     container: renderCanvasRefs.value,
     height: height,
@@ -281,28 +281,28 @@ onMounted(() => {
   });
 
   // 保存XML逻辑
-  graph.value.saveXML = (createFile = true) => {
-    exportXML(graph.value.save(), processModel.value, createFile)
+  graph.saveXML = (createFile = true) => {
+    exportXML(graph.save(), processModel.value, createFile)
   };
   getGraphData.value = () => {
-    return graph.value.save()
+    return graph.save()
   }
-  saveXML.value = graph.value.saveXML
+  saveXML.value = graph.saveXML
   // 获取XML逻辑
-  graph.value.getXML = (createFile = false) => exportXML(graph.value.save(), processModel.value, createFile);
-  getXML.value = graph.value.getXML
+  graph.getXML = (createFile = false) => exportXML(graph.save(), processModel.value, createFile);
+  getXML.value = graph.getXML
   // 保存图片逻辑
-  graph.value.saveImg = (createFile = true) => exportImg(renderCanvasRefs.value, processModel.value.name, createFile);
-  saveImg.value = graph.value.saveImg
+  graph.saveImg = (createFile = true) => exportImg(renderCanvasRefs.value, processModel.value.name, createFile);
+  saveImg.value = graph.saveImg
 
-  graph.value.setMode(props.isView?'view':props.mode);
+  graph.setMode(props.isView?'view':props.mode);
 
 
   nextTick().then(() => {
-    graph.value.data(initShape(props.data));
-    graph.value.render();
+    graph.data(initShape(props.data));
+    graph.render();
     if (props.isView && props.data && props.data.nodes) {
-      graph.value.fitView(5)
+      graph.fitView(5)
     }
     initEvents();
   })
@@ -310,7 +310,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener("resize", resizeFunc.value);
-  graph.value.getNodes().forEach(node => {
+  graph.getNodes().forEach(node => {
     node.getKeyShape().stopAnimate();
   });
 })
